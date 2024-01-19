@@ -5,8 +5,11 @@ x64/
 [Oo]bj/
 thunderstore/*.zip
 
+# Visual Studio Files
 *.csproj
 *.sln
+AssemblyInfo.cs
+.vs
 
 # Logs
 logs
