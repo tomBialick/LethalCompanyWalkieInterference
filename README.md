@@ -3,7 +3,7 @@
 Fork of the AlwaysHearActiveWalkies lethal company mod.
 
 ## Thunderstore
-https://thunderstore.io/c/lethal-company/p/Suskitech/AlwaysHearActiveWalkies/
+- TBD
 
 ## Configuration
 Configuration leverages [Bepinex Configuration API](https://docs.bepinex.dev/articles/user_guide/configuration.html). Either load up the mod once to generate a config file or manually add it to:
