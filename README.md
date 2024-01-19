@@ -1,6 +1,6 @@
-# AlwaysHearActiveWalkies
+# WalikeInterference
 
-Repo for the AlwaysHearActiveWalkies lethal company mod.
+Fork of the AlwaysHearActiveWalkies lethal company mod.
 
 ## Thunderstore
 https://thunderstore.io/c/lethal-company/p/Suskitech/AlwaysHearActiveWalkies/
@@ -42,12 +42,3 @@ PlayerToPlayerSpatialHearingRange = 20
   - Max distance at which a player can hear other players.
 
 
-## Contribution
-I don't have a lot of time to dedicate to this mod but it has gained enough traction that I'll try to keep it updated and working for as log as its needed. Ideally the game will add this in as a native feature soon and it will be obviated.
-
-Bug reports and PRs for improvements are welcome but due to the difficulty of testing this mod I will probably be a bit slow to review and integrate them.
-
-## Contributors
-Many thanks to these contributors!
-
-[@etrant](https://github.com/etrant)
