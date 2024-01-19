@@ -18,13 +18,18 @@ internal class PlayerControllerBPatch
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]
-    static void staticSoundWhileSprintingPatch(){
+    static void staticSoundWhileSprintingPatch(PlayerControllerB __instance){
         // AudioClip radioStaticAudioClip = BundleLoader.GetLoadedAsset<AudioClip>("Assets/AssetBundles/radio_static.wav");
         //radioStaticAudioClip = clip;
         // Plugin.Log.LogInfo("Loaded Audio Clip for Asset Bundle:");
         // Plugin.Log.LogInfo(radioStaticAudioClip);
-        Plugin.Log.LogInfo(Plugin.SoundFX[0]);
-        GameNetworkManager.Instance.localPlayerController.movementAudio.PlayOneShot(Plugin.SoundFX[0],1f);
+        AudioClip radioStaticAudioClip = Plugin.SoundFX[0];
+        Plugin.Log.LogInfo(radioStaticAudioClip);
+        Plugin.Log.LogInfo($"Audio Clip Name: {radioStaticAudioClip.name}");
+
+        if (__instance.isSprinting) {
+            GameNetworkManager.Instance.localPlayerController.movementAudio.PlayOneShot(radioStaticAudioClip, 0.5f);
+        }
     }
 
     [HarmonyPatch("Update")]
