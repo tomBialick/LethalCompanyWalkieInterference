@@ -7,6 +7,7 @@ thunderstore/*.zip
 
 # Visual Studio Files
 *.csproj
+*.csproj.user
 *.sln
 AssemblyInfo.cs
 .vs
