@@ -11,6 +11,7 @@ thunderstore/*.zip
 *.sln
 AssemblyInfo.cs
 .vs
+.vscode
 
 # Logs
 logs

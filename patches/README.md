@@ -43,7 +43,7 @@
 - seems like this is the method we want to account for walkie noise
 - <mark>this manages who hears what audio, and how it sounds</mark>
 
-### Sound Manager
+### SoundManager
 - 
 
 
@@ -62,6 +62,10 @@
   - Has some interesting textures drawn onto the walkie's screen
 - https://thunderstore.io/c/lethal-company/p/Suskitech/AlwaysHearActiveWalkies/
 
+### Auxilary Mods
+- https://thunderstore.io/c/lethal-company/p/2018/LC_API/
+
+
 ### Custom Sound Mods
 - https://thunderstore.io/c/lethal-company/p/no00ob/LCSoundTool/
   - mod allows you to replace any sound in the game
@@ -71,3 +75,8 @@
 - https://thunderstore.io/c/lethal-company/p/Clementinise/CustomSounds/
   - lets you replace game's default sounds with your own custom sounds
   - requires: https://thunderstore.io/c/lethal-company/p/no00ob/LCSoundTool/
+
+## Helpful Videos
+- [Lethal Company - How to write your own mod from scratch! - YouTube](https://www.youtube.com/watch?v=4Q7Zp5K2ywI)
+- [How to setup BepInEx with Lethal Company and install/configure mods (youtube.com)](https://www.youtube.com/watch?v=eXA60ZWMI4M&t=0s)
+- [Lethal Company - How to mod in your own sounds from scratch! (youtube.com)](https://www.youtube.com/watch?v=UDfC9uZnrFo&t=1s)

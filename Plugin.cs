@@ -3,6 +3,17 @@ using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
 using LCWalkieInterferenceMod.Patches;
+using UnityEngine;
+using System.IO;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Linq;
+using System.Reflection;
+// using LCSoundTool;
+// using CustomSounds.Networking;
+// using CustomSounds.Patches;
+// using LC_API.BundleAPI;
 
 namespace LCWalkieInterferenceMod;
 
@@ -28,6 +39,9 @@ public class Plugin : BaseUnityPlugin
     public static ManualLogSource Log;
 
     private static Plugin Instance;
+
+    internal static List<AudioClip> SoundFX;
+    internal static AssetBundle Bundle;
 
     public void Awake()
     {
@@ -63,5 +77,20 @@ public class Plugin : BaseUnityPlugin
         Log.LogInfo("AudibleDistance: " + AudibleDistance);
         Log.LogInfo("WalkieRecordingRange: " + WalkieRecordingRange);
         Log.LogInfo("PlayerToPlayerSpatialHearingRange: " + PlayerToPlayerSpatialHearingRange);
+
+
+        SoundFX = new List<AudioClip>();
+        string FolderLocation = Instance.Info.Location;
+        FolderLocation = FolderLocation.TrimEnd("LCWalkieInterference.dll".ToCharArray());
+        Bundle = AssetBundle.LoadFromFile(FolderLocation + "lcwalkieintassetbundle");
+        if (Bundle != null){
+            Log.LogInfo("Successfully loaded asset bundle");
+            SoundFX = Bundle.LoadAllAssets<AudioClip>().ToList(); 
+        }
+        else{
+            Log.LogError("Failure to load asset bundle.");
+        }
+        
+
     }
 }

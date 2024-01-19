@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
+// using LC_API.BundleAPI;
 
 namespace LCWalkieInterferenceMod.Patches;
 
@@ -14,6 +15,17 @@ internal class PlayerControllerBPatch
     private static readonly float AudibleDistance = Plugin.AudibleDistance;
     private static readonly float WalkieRecordingRange = Plugin.WalkieRecordingRange;
     private static readonly float PlayerToPlayerSpatialHearingRange = Plugin.PlayerToPlayerSpatialHearingRange;
+
+    [HarmonyPatch("Update")]
+    [HarmonyPostfix]
+    static void staticSoundWhileSprintingPatch(){
+        // AudioClip radioStaticAudioClip = BundleLoader.GetLoadedAsset<AudioClip>("Assets/AssetBundles/radio_static.wav");
+        //radioStaticAudioClip = clip;
+        // Plugin.Log.LogInfo("Loaded Audio Clip for Asset Bundle:");
+        // Plugin.Log.LogInfo(radioStaticAudioClip);
+        Plugin.Log.LogInfo(Plugin.SoundFX[0]);
+        GameNetworkManager.Instance.localPlayerController.movementAudio.PlayOneShot(Plugin.SoundFX[0],1f);
+    }
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]

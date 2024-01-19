@@ -1,6 +1,7 @@
 ﻿using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
+using LC_API.BundleAPI;
 
 namespace LCWalkieInterferenceMod.Patches;
 
@@ -8,6 +9,7 @@ namespace LCWalkieInterferenceMod.Patches;
 internal class StartOfRoundPatch
 {
     //AudioClip clip = new AudioClip();
+    //public AudioClip radioStaticAudioClip;
 
     [HarmonyPatch("UpdatePlayerVoiceEffects")]
     [HarmonyPrefix]
@@ -15,7 +17,18 @@ internal class StartOfRoundPatch
     {
         //currentVoiceChatAudioSource.
         //SoundManager
-        //currentVoiceChatAudioSource.clip = 
+        // AudioClip radioStaticAudioClip = BundleLoader.GetLoadedAsset<AudioClip>("Assets/AssetBundles/radio_static.wav");
+        //radioStaticAudioClip = clip;
+        // Plugin.Log.LogInfo("Loaded Audio Clip for Asset Bundle:");
+        // Plugin.Log.LogInfo(radioStaticAudioClip);
+        
+        // currentVoiceChatAudioSource.clip = Plugin.radioStaticAudioClip;
+        // AudioSource currentVoiceChatAudioSource = allPlayerScripts[i].currentVoiceChatAudioSource;
+
+        // for (int i = 0; i < allPlayerScripts.Length; i++)
+        // {
+
+        // }
 
         //if (GameNetworkManager.Instance == null || GameNetworkManager.Instance.localPlayerController == null)
         //{
