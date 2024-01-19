@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
 
-namespace LCAlwaysHearWalkieMod.Patches;
+namespace LCWalkieInterferenceMod.Patches;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 internal class PlayerControllerBPatch
@@ -17,7 +17,7 @@ internal class PlayerControllerBPatch
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]
-    static void alwaysHearWalkieTalkiesPatch(ref bool ___holdingWalkieTalkie, ref PlayerControllerB __instance)
+    static void walkieInterferenceModPatch(ref bool ___holdingWalkieTalkie, ref PlayerControllerB __instance)
     {
         // Throttle calls to reduce performance impact
         throttle += Time.deltaTime;

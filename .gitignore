@@ -4,3 +4,22 @@ x64/
 [Bb]in/
 [Oo]bj/
 thunderstore/*.zip
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+*.zip
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

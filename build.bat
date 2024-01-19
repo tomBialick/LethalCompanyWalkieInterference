@@ -1,4 +1,4 @@
-dotnet build %~dp0AlwaysHearWalkie.csproj
-powershell -Command Copy-Item -Force -Path "%~dp0bin\Debug\netstandard2.1\AlwaysHearWalkie.dll" -Destination "%~dp0thunderstore\AlwaysHearWalkie.dll"
-powershell -Command Copy-Item -Force -Path "%~dp0bin\Debug\netstandard2.1\AlwaysHearWalkie.dll" -Destination """E:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\plugins\AlwaysHearWalkie.dll"""
-Start-Process & "E:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company.exe"
+dotnet build %~dp0WalkieInterference.csproj
+powershell -Command Copy-Item -Force -Path "%~dp0bin\Debug\netstandard2.1\WalkieInterference.dll" -Destination "%~dp0thunderstore\WalkieInterference.dll"
+powershell -Command Copy-Item -Force -Path "%~dp0bin\Debug\netstandard2.1\WalkieInterference.dll" -Destination """D:\SteamLibrary\steamapps\common\Lethal Company\BepInEx\plugins\WalkieInterference.dll"""
+Start-Process & "D:\SteamLibrary\steamapps\common\Lethal Company\Lethal Company.exe"

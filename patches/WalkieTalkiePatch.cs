@@ -1,13 +1,13 @@
 using HarmonyLib;
 
-namespace LCAlwaysHearWalkieMod.Patches;
+namespace LCWalkieInterferenceMod.Patches;
 
 [HarmonyPatch(typeof(WalkieTalkie))]
 internal class WalkieTalkiePatch
 {
     [HarmonyPatch("EnableWalkieTalkieListening")]
     [HarmonyPrefix]
-    static bool alwaysHearWalkieTalkiesEnableWalkieTalkieListeningPatch(bool enable)
+    static bool walkieInterferenceModEnableWalkieTalkieListeningPatch(bool enable)
     {
         // If we are disabling Walkie talkie Listening, skip the original function entirely. We dont want to set holdingWalkieTalkie to 
         // false anymore from this location because that is controlled by distance to walkies on the playerControllerB patch.

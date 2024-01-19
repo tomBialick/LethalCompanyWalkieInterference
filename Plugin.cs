@@ -2,14 +2,14 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using LCAlwaysHearWalkieMod.Patches;
+using LCWalkieInterferenceMod.Patches;
 
-namespace LCAlwaysHearWalkieMod;
+namespace LCWalkieInterferenceMod;
 
 public static class PluginInfo
 {
-    public const string modGUID = "suskitech.LCAlwaysHearActiveWalkie";
-    public const string modName = "LC Always Hear Active Walkies";
+    public const string modGUID = "suskitech.LCWalkieInterference";
+    public const string modName = "LC Walkie Interference";
     public const string modVersion = "1.4.4";
 }
 
@@ -55,7 +55,7 @@ public class Plugin : BaseUnityPlugin
         Log.LogInfo("\\ /");
         Log.LogInfo("/|\\");
         Log.LogInfo(" |----|");
-        Log.LogInfo(" |[__]| Always Hear Active Walkies");
+        Log.LogInfo(" |[__]| Walkie Interference");
         Log.LogInfo($" |.  .| Version {PluginInfo.modVersion} Loaded");
         Log.LogInfo(" |____|");
         Log.LogInfo("");
