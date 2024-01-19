@@ -53,9 +53,21 @@
 
 
 ## Related Mods
+
+### Walkie Mods
 - https://thunderstore.io/c/lethal-company/p/unity/WalkieVolume/
   - The configuration appears to be done in LethalConfigManager, not during the game
 - https://thunderstore.io/c/lethal-company/p/Larkooo/FrequencyWalkie/
   - Has some interesting usage of `HUDManager.Instance.DisplayTip`
   - Has some interesting textures drawn onto the walkie's screen
 - https://thunderstore.io/c/lethal-company/p/Suskitech/AlwaysHearActiveWalkies/
+
+### Custom Sound Mods
+- https://thunderstore.io/c/lethal-company/p/no00ob/LCSoundTool/
+  - mod allows you to replace any sound in the game
+  - can replace a sound with one or multiple options
+  - mod is fully client side
+  - to replace sound without requiring a custom mod, use: https://thunderstore.io/c/lethal-company/p/Clementinise/CustomSounds/
+- https://thunderstore.io/c/lethal-company/p/Clementinise/CustomSounds/
+  - lets you replace game's default sounds with your own custom sounds
+  - requires: https://thunderstore.io/c/lethal-company/p/no00ob/LCSoundTool/
