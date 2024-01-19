@@ -1,4 +1,4 @@
-# WalikeInterference
+# WalkieInterference
 
 Fork of the AlwaysHearActiveWalkies lethal company mod.
 
