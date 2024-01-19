@@ -10,7 +10,7 @@ public static class PluginInfo
 {
     public const string modGUID = "suskitech.LCWalkieInterference";
     public const string modName = "LC Walkie Interference";
-    public const string modVersion = "1.4.4";
+    public const string modVersion = "1.0.0";
 }
 
 [BepInPlugin(PluginInfo.modGUID, PluginInfo.modName, PluginInfo.modVersion)]

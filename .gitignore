@@ -5,6 +5,9 @@ x64/
 [Oo]bj/
 thunderstore/*.zip
 
+*.csproj
+*.sln
+
 # Logs
 logs
 *.log
