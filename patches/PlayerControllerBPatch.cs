@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace LCWalkieInterferenceMod.Patches;
 
+[RequireComponent(typeof(AudioSource))]
 [HarmonyPatch(typeof(PlayerControllerB))]
 internal class PlayerControllerBPatch
 {
@@ -14,6 +15,8 @@ internal class PlayerControllerBPatch
     private static readonly float AudibleDistance = Plugin.AudibleDistance;
     private static readonly float WalkieRecordingRange = Plugin.WalkieRecordingRange;
     private static readonly float PlayerToPlayerSpatialHearingRange = Plugin.PlayerToPlayerSpatialHearingRange;
+
+    private static StaticEffect staticEffect = new StaticEffect();
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]
@@ -70,6 +73,7 @@ internal class PlayerControllerBPatch
                 for (int i = 0; i < walkieTalkiesOutOfRange.Count; i++)
                 {
                     if (i < walkieTalkiesInRange.Count) {
+                        staticEffect.setApplyStaticNoise(false);
                         walkieTalkiesOutOfRange[i].thisAudio.Stop();
                     }
                 }
@@ -77,6 +81,7 @@ internal class PlayerControllerBPatch
 
             // Return early if we are out of range of all active walkies
             if (!isAnyWalkieInRange) {
+                staticEffect.setApplyStaticNoise(false);
                 return;
             }
         }
@@ -181,6 +186,7 @@ internal class PlayerControllerBPatch
             currentVoiceChatAudioSource.panStereo = GameNetworkManager.Instance.localPlayerController.isPlayerDead ? 0f : 0.4f;
             occludeAudio.lowPassOverride = 4000f;
             lowPass.lowpassResonanceQ = 3f;
+            staticEffect.setApplyStaticNoise(true);
         }
 
         static void makePlayerSoundSpatial(PlayerControllerB playerController)
@@ -202,4 +208,26 @@ internal class PlayerControllerBPatch
             lowPass.lowpassResonanceQ = 1f;
         }
     }
+}
+
+public class StaticEffect {
+
+    private bool applyStaticNoise = false;
+    private System.Random rand = new System.Random();
+
+    public void setApplyStaticNoise(bool state) {
+        applyStaticNoise = state;
+    }
+    public void OnAudioFilterRead(float[] data, int channels)
+    {
+        if (!applyStaticNoise)
+        {
+            return;
+        }
+        for (int i = 0; i < data.Length; i++)
+        {
+            data[i] = (float)(rand.NextDouble() * 2.0 - 1.0); //+ offset);
+        }
+    }
+
 }
