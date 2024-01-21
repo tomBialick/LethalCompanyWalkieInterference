@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using HarmonyLib;
+using BepInEx.Logging;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace LCWalkieInterferenceMod.Patches;
 
@@ -15,13 +17,19 @@ internal class PlayerControllerBPatch
     private static readonly float AudibleDistance = Plugin.AudibleDistance;
     private static readonly float WalkieRecordingRange = Plugin.WalkieRecordingRange;
     private static readonly float PlayerToPlayerSpatialHearingRange = Plugin.PlayerToPlayerSpatialHearingRange;
-
-    private static StaticEffect staticEffect = new StaticEffect();
+    public static ManualLogSource Log;
+    private static AudioClip radioStaticAudioClip;
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]
     static void walkieInterferenceModPatch(ref bool ___holdingWalkieTalkie, ref PlayerControllerB __instance)
     {
+
+        radioStaticAudioClip = Plugin.SoundFX[0];
+        SoundManager.Instance.syncedAudioClips.AddItem(radioStaticAudioClip);
+        int staticIndex = SoundManager.Instance.syncedAudioClips.Length - 1; // Shovel bang???
+        Log = BepInEx.Logging.Logger.CreateLogSource(PluginInfo.modGUID);
+
         // Throttle calls to reduce performance impact
         throttle += Time.deltaTime;
         if (throttle < throttleInterval) {
@@ -73,7 +81,6 @@ internal class PlayerControllerBPatch
                 for (int i = 0; i < walkieTalkiesOutOfRange.Count; i++)
                 {
                     if (i < walkieTalkiesInRange.Count) {
-                        staticEffect.setApplyStaticNoise(false);
                         walkieTalkiesOutOfRange[i].thisAudio.Stop();
                     }
                 }
@@ -81,7 +88,6 @@ internal class PlayerControllerBPatch
 
             // Return early if we are out of range of all active walkies
             if (!isAnyWalkieInRange) {
-                staticEffect.setApplyStaticNoise(false);
                 return;
             }
         }
@@ -116,6 +122,7 @@ internal class PlayerControllerBPatch
                 float distanceLocalPlayerToOtherPlayer = Vector3.Distance(localOrSpectatedPlayerController.transform.position, otherPlayerController.transform.position);
                 float distanceOtherPlayerToClosestWalkie = float.MaxValue;
                 float distanceLocalPlayerToClosestWalkie = float.MaxValue;
+                int closestWalkieIndex = 0;
 
                 for (int j = 0; j < WalkieTalkie.allWalkieTalkies.Count; j++)
                 {
@@ -130,6 +137,8 @@ internal class PlayerControllerBPatch
                     if (distanceLocalToWalkie < distanceLocalPlayerToClosestWalkie)
                     {
                         distanceLocalPlayerToClosestWalkie = distanceLocalToWalkie;
+                        closestWalkieIndex = j;
+
                     }
 
                     // Only if walkie is being spoken into, get the distance from the other player to the closest active walkie
@@ -159,6 +168,7 @@ internal class PlayerControllerBPatch
                 if (otherPlayerController.speakingToWalkieTalkie && playerVolumeByWalkieTalkieDistance > playerVolumeBySpatialDistance)
                 {
                     makePlayerSoundWalkieTalkie(otherPlayerController);
+                    SoundManager.Instance.PlayAudio1AtPositionClientRpc(WalkieTalkie.allWalkieTalkies[closestWalkieIndex].transform.position, staticIndex);
                 }
                 else
                 {
@@ -186,7 +196,11 @@ internal class PlayerControllerBPatch
             currentVoiceChatAudioSource.panStereo = GameNetworkManager.Instance.localPlayerController.isPlayerDead ? 0f : 0.4f;
             occludeAudio.lowPassOverride = 4000f;
             lowPass.lowpassResonanceQ = 3f;
-            staticEffect.setApplyStaticNoise(true);
+            Log.LogInfo("Attempting to apply static effect");
+            
+            Plugin.Log.LogInfo(radioStaticAudioClip);
+            Plugin.Log.LogInfo($"Audio Clip Name: {radioStaticAudioClip.name}");
+            // GameNetworkManager.Instance.localPlayerController.movementAudio.PlayOneShot(radioStaticAudioClip, 0.5f);
         }
 
         static void makePlayerSoundSpatial(PlayerControllerB playerController)
@@ -208,26 +222,4 @@ internal class PlayerControllerBPatch
             lowPass.lowpassResonanceQ = 1f;
         }
     }
-}
-
-public class StaticEffect {
-
-    private bool applyStaticNoise = false;
-    private System.Random rand = new System.Random();
-
-    public void setApplyStaticNoise(bool state) {
-        applyStaticNoise = state;
-    }
-    public void OnAudioFilterRead(float[] data, int channels)
-    {
-        if (!applyStaticNoise)
-        {
-            return;
-        }
-        for (int i = 0; i < data.Length; i++)
-        {
-            data[i] = (float)(rand.NextDouble() * 2.0 - 1.0); //+ offset);
-        }
-    }
-
 }
