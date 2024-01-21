@@ -3,8 +3,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using BepInEx.Logging;
 using UnityEngine;
-using UnityEngine.Audio;
-using System;
+// using System;
 
 namespace LCWalkieInterferenceMod.Patches;
 
@@ -20,7 +19,8 @@ internal class PlayerControllerBPatch
     private static readonly float PlayerToPlayerSpatialHearingRange = Plugin.PlayerToPlayerSpatialHearingRange;
     public static ManualLogSource Log;
     private static AudioClip radioStaticAudioClip;
-    // private static bool staticClipPlaying = false;
+    private static float staticVolumeTimer = 0.0f; // start at "played"?
+    private static float staticVolume = 0.5f;
 
     [HarmonyPatch("Update")]
     [HarmonyPostfix]
@@ -52,18 +52,6 @@ internal class PlayerControllerBPatch
         }
 
         radioStaticAudioClip = Plugin.SoundFX[0];
-        // int staticIndex = SoundManager.Instance.syncedAudioClips.Length - 1; // Shovel bang???
-        // int staticIndex = -1;
-        // if (!addedClip) {
-        //     SoundManager.Instance.syncedAudioClips.AddItem(radioStaticAudioClip);
-        //     staticIndex = Array.IndexOf(SoundManager.Instance.syncedAudioClips, radioStaticAudioClip);
-        //     addedClip = true;
-        // }
-        // if (staticIndex < 0)
-        // {
-        //     Log.LogError("Static not added to syncedAudio!");
-        // }
-        // SoundManager.Instance.syncedAudioClips.
 
         if (!GameNetworkManager.Instance.localPlayerController.isPlayerDead) {
             List<WalkieTalkie> walkieTalkiesInRange = new List<WalkieTalkie>();
@@ -93,12 +81,11 @@ internal class PlayerControllerBPatch
                 for (int i = 0; i < walkieTalkiesOutOfRange.Count; i++)
                 {
                     if (i < walkieTalkiesInRange.Count) {
-                        // if (staticClipPlaying)    
-                        // {
-                        //     SoundManager.Instance.ambienceAudio.Stop();
-                        //     staticClipPlaying = false;
-                        // }
                         walkieTalkiesOutOfRange[i].thisAudio.Stop();
+                        // if (staticVolumeTimer < 1.0f) {
+                        //     staticVolume = UnityEngine.Random.Range(0.0f, 0.55f);
+                        //     staticVolumeTimer = 1.0f;
+                        // }
                     }
                 }
             }
@@ -139,7 +126,6 @@ internal class PlayerControllerBPatch
                 float distanceLocalPlayerToOtherPlayer = Vector3.Distance(localOrSpectatedPlayerController.transform.position, otherPlayerController.transform.position);
                 float distanceOtherPlayerToClosestWalkie = float.MaxValue;
                 float distanceLocalPlayerToClosestWalkie = float.MaxValue;
-                int closestWalkieIndex = 0;
 
                 for (int j = 0; j < WalkieTalkie.allWalkieTalkies.Count; j++)
                 {
@@ -154,8 +140,6 @@ internal class PlayerControllerBPatch
                     if (distanceLocalToWalkie < distanceLocalPlayerToClosestWalkie)
                     {
                         distanceLocalPlayerToClosestWalkie = distanceLocalToWalkie;
-                        closestWalkieIndex = j;
-
                     }
 
                     // Only if walkie is being spoken into, get the distance from the other player to the closest active walkie
@@ -215,18 +199,20 @@ internal class PlayerControllerBPatch
 
 
             Log.LogInfo("Attempting to apply static effect");
-            
             Plugin.Log.LogInfo(radioStaticAudioClip);
             Plugin.Log.LogInfo($"Audio Clip Name: {radioStaticAudioClip.name}");
-            // GameNetworkManager.Instance.localPlayerController.movementAudio.PlayOneShot(radioStaticAudioClip, 0.5f);
-            // SoundManager.Instance.PlayAudio1AtPositionClientRpc(WalkieTalkie.allWalkieTalkies[closestWalkieIndex].transform.position, staticIndex);
             Vector3 vector = RoundManager.Instance.GetRandomPositionInRadius(GameNetworkManager.Instance.localPlayerController.transform.position, 6f, 11f, null);
             SoundManager.Instance.ambienceAudio.transform.position = vector;
-            // SoundManager.Instance.ambienceAudio.volume = 0.5f;
-            // SoundManager.Instance.ambienceAudio.clip = radioStaticAudioClip;
-            SoundManager.Instance.ambienceAudio.PlayOneShot(radioStaticAudioClip, 0.5f);
-            // staticClipPlaying = true;
-            // WalkieTalkie.allWalkieTalkies[0].thisAudio.
+            if (staticVolumeTimer <= 0.0f) {
+                staticVolume = UnityEngine.Random.Range(0.35f, 0.95f);
+                staticVolumeTimer = 2.0f;
+                // change player volume?
+                // SoundManager.Instance.ambienceAudio.PlayOneShot(radioStaticAudioClip, staticVolume);
+            } else 
+            {
+                staticVolumeTimer -= Time.deltaTime;
+            }
+            SoundManager.Instance.ambienceAudio.PlayOneShot(radioStaticAudioClip, staticVolume);
         }
 
         static void makePlayerSoundSpatial(PlayerControllerB playerController)
